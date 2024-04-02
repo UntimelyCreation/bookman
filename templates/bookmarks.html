@@ -1,0 +1,15 @@
+<div id="bookmarks">
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody id="bookmarks-content">
+        {% for bookmark in bookmarks %}
+            {% include "bookmark.html" %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>

@@ -1,0 +1,5 @@
+<tr id="bookmark-{{ bookmark.id.id }}">
+    <td>{{ bookmark.name }}</td>
+    <td><a target="_blank" rel="noopener noreferrer" href="{{ bookmark.url }}">{{ bookmark.url }}</a></td>
+    <td><button hx-delete="/bookmark/{{ bookmark.id.id }}" hx-trigger="click" hx-target="#bookmark-{{ bookmark.id.id }}" hx-swap="delete">Delete</button></td>
+</tr>
