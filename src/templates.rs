@@ -15,5 +15,11 @@ pub struct BookmarkTemplate {
 }
 
 #[derive(Template)]
+#[template(path = "bookmark-edit.html")]
+pub struct BookmarkEditTemplate {
+    pub bookmark: Bookmark,
+}
+
+#[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate;

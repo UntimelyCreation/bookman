@@ -6,7 +6,7 @@
             <th>URL</th>
         </tr>
     </thead>
-    <tbody id="bookmarks-content">
+    <tbody id="bookmarks-content" hx-target="closest tr" hx-swap="outerHTML">
         {% for bookmark in bookmarks %}
             {% include "bookmark.html" %}
         {% endfor %}
