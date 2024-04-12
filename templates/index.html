@@ -8,6 +8,7 @@
 <form id="add-form" hx-on::after-request="this.reset()">
     <input placeholder="Name" required type=text name="name">
     <input placeholder="URL" required type=text name="url">
+    <input placeholder="Tags" required type=text name="tags">
     <button hx-post="/bookmark" hx-trigger="click" hx-target="#bookmarks-content" hx-swap="beforeend">Add</button>
 </form>
 {% endblock %}

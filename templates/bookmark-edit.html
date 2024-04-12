@@ -1,6 +1,7 @@
 <tr hx-trigger='cancel' class='editing' hx-get="/bookmark/{{ bookmark.id.id }}">
-    <td><input placeholder="Name" required type=text name="name" value="{{ bookmark.name}}"></td>
-    <td><input placeholder="URL" required type=text name="url" value="{{ bookmark.url }}"></td>
+    <td><input required type=text name="name" value="{{ bookmark.name}}"></td>
+    <td><input required type=text name="url" value="{{ bookmark.url }}"></td>
+    <td><input required type=text name="tags" value="{{ bookmark.tags }}"></td>
     <td>
         <button class="btn btn-danger" hx-put="/bookmark/{{ bookmark.id.id }}" hx-include="closest tr">
             Confirm

@@ -5,7 +5,7 @@ use axum::{
     routing::{get, post},
     Form, Router,
 };
-use object::{Bookmark, NewBookmark};
+use object::{Bookmark, NewBookmark, NewBookmarkForm, Tags};
 use once_cell::sync::Lazy;
 use surrealdb::{
     engine::remote::ws::{Client, Ws},
@@ -35,12 +35,19 @@ async fn fetch_bookmark(Path(id): Path<String>) -> impl IntoResponse {
     }
 }
 
-async fn create_bookmark(Form(form): Form<NewBookmark>) -> impl IntoResponse {
+async fn create_bookmark(Form(form): Form<NewBookmarkForm>) -> impl IntoResponse {
+    let tags = Tags(
+        form.tags
+            .split(',')
+            .map(|tag| tag.trim().to_string())
+            .collect(),
+    );
     let created: Vec<Bookmark> = DB
         .create("bookmark")
         .content(NewBookmark {
             name: form.name,
             url: form.url,
+            tags,
         })
         .await
         .unwrap();
@@ -60,13 +67,20 @@ async fn edit_bookmark(Path(id): Path<String>) -> impl IntoResponse {
 
 async fn update_bookmark(
     Path(id): Path<String>,
-    Form(form): Form<NewBookmark>,
+    Form(form): Form<NewBookmarkForm>,
 ) -> impl IntoResponse {
+    let tags = Tags(
+        form.tags
+            .split(',')
+            .map(|tag| tag.trim().to_string())
+            .collect(),
+    );
     let updated: Option<Bookmark> = DB
         .update(("bookmark", id))
         .content(NewBookmark {
             name: form.name,
             url: form.url,
+            tags,
         })
         .await
         .unwrap();
