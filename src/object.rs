@@ -33,3 +33,8 @@ pub struct Bookmark {
     pub url: String,
     pub tags: Tags,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SearchForm {
+    pub content: String,
+}

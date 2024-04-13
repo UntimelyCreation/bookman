@@ -5,7 +5,7 @@ use axum::{
     routing::{get, post},
     Form, Router,
 };
-use object::{Bookmark, NewBookmark, NewBookmarkForm, Tags};
+use object::{Bookmark, NewBookmark, NewBookmarkForm, SearchForm, Tags};
 use once_cell::sync::Lazy;
 use surrealdb::{
     engine::remote::ws::{Client, Ws},
@@ -23,6 +23,17 @@ async fn index() -> impl IntoResponse {
 
 async fn fetch_bookmarks() -> impl IntoResponse {
     let bookmarks: Vec<Bookmark> = DB.select("bookmark").await.unwrap();
+
+    BookmarksTemplate { bookmarks }
+}
+
+async fn search_bookmarks(Form(form): Form<SearchForm>) -> impl IntoResponse {
+    let sql = format!(
+        "SELECT * FROM type::table($table) WHERE (name CONTAINS '{}') OR (url CONTAINS '{}') OR (tags CONTAINS '{}')",
+        form.content, form.content, form.content
+    );
+    let mut result = DB.query(sql).bind(("table", "bookmark")).await.unwrap();
+    let bookmarks: Vec<Bookmark> = result.take(0).unwrap();
 
     BookmarksTemplate { bookmarks }
 }
@@ -113,6 +124,7 @@ async fn main() -> surrealdb::Result<()> {
     let app = Router::new()
         .route("/", get(index))
         .route("/bookmarks", get(fetch_bookmarks))
+        .route("/bookmarks/search", post(search_bookmarks))
         .route("/bookmark", post(create_bookmark))
         .route(
             "/bookmark/:id",

@@ -2,13 +2,18 @@
 
 {% block content %}
 <h1>Bookmarks</h1>
-<div id="list" hx-get="/bookmarks" hx-target="this" hx-trigger="load" hx-swap="outerHTML">
+<input type="search" name="content"
+    placeholder="Begin Typing To Search..."
+    hx-post="/bookmarks/search"
+    hx-trigger="input changed delay:500ms, search"
+    hx-target="#bookmarks">
+<div id="bookmark-list" hx-get="/bookmarks" hx-target="this" hx-trigger="load" hx-swap="outerHTML">
     Loading...
 </div>
 <form id="add-form" hx-on::after-request="this.reset()">
-    <input placeholder="Name" required type=text name="name">
-    <input placeholder="URL" required type=text name="url">
-    <input placeholder="Tags" required type=text name="tags">
+    <input type=text name="name" placeholder="Name" required>
+    <input type=text name="url" placeholder="URL" required>
+    <input type=text name="tags" placeholder="Tags" required>
     <button hx-post="/bookmark" hx-trigger="click" hx-target="#bookmarks-content" hx-swap="beforeend">Add</button>
 </form>
 {% endblock %}
